@@ -40,7 +40,7 @@ export class App extends Component {
   };
   onFilterChange = e => {
     const { value } = e.currentTarget;
-    this.setState({ filter: value });
+    this.setState({ filter: value.toLowerCase() });
   };
   deleteContact = id => {
     this.setState(prevState => ({
@@ -48,6 +48,10 @@ export class App extends Component {
     }));
   };
   render() {
+    const { filter, contacts } = this.state;
+    const visibleContacts = contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter)
+    );
     return (
       <div
         style={{
@@ -59,6 +63,7 @@ export class App extends Component {
         <ContactForm onSubmit={this.addContact} />
         <Filter value={this.state.filter} onChange={this.onFilterChange} />
         <h2>Contacts</h2>
+        <ContactList contacts={visibleContacts} onDelete={this.deleteContact} />
       </div>
     );
   }
